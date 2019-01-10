@@ -1,10 +1,10 @@
-from flask import Flask,request,redirect,url_for
+from flask import Flask, request, redirect, url_for
 from forumdb import get_posts, add_post
 
-app=Flask(__name__)
+app = Flask(__name__)
 
-#Html portion of the page
-HTML_WRAP='''\
+# Html portion of the page
+HTML_WRAP = '''\
 <!DOCTYPE html>
 <html>
   <head>
@@ -30,25 +30,33 @@ HTML_WRAP='''\
   </body>
 </html>
 '''
-#Html template for an individual post
-POST='''\
+# Html template for an individual post
+POST = '''\
     <div class=post><em class=date>%s</em><br>%s
+    <form class=post method=delete>
+        <button>Done!</button>
     </div>
 '''
-#main page of the app
-@app.route('/',methods=['GET'])
+# main page of the app
+
+
+@app.route('/', methods=['GET'])
 def main():
-    posts="\n".join(POST%(date,text) for date,text in get_posts())
-    html=HTML_WRAP % posts
+    posts = "\n".join(POST % (date, text) for date, text in get_posts())
+    html = HTML_WRAP % posts
     return html
 
-#New Post submission
-@app.route('/',methods=['POST'])
+# New Post submission
+
+
+@app.route('/', methods=['POST'])
 def post():
-    message=request.form['content']
+    message = request.form['content']
     add_post(message)
     return redirect(url_for('main'))
 
-#for running at port 8000
-if __name__=="__main__":
-  app.run(host='0.0.0.0', port=8000)
+# For running at port 8000
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8000)
